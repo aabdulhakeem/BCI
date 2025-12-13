@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import spectrogram as _spectrogram
+from scipy.signal import butter, filtfilt
 
 
 def plot_waveform(signal, sr, ax=None, title='Waveform'):
@@ -86,3 +87,11 @@ def plot_spectrogram(signal, sr, nperseg=1024, noverlap=None, cmap='magma', titl
     plt.ylim(0, sr / 2)
     plt.tight_layout()
     plt.show()
+
+def create_bandpass_filter(sample_rate, lowcut, highcut, order=5):
+    """Create a bandpass Butterworth filter."""
+    nyquist = sample_rate / 2
+    low = lowcut / nyquist
+    high = highcut / nyquist
+    b, a = butter(order, [low, high], btype='band')
+    return b, a
